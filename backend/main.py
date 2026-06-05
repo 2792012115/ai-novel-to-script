@@ -24,7 +24,7 @@ async def convert(req:ConvertRequest):
     meta=NovelPreprocessor.extract_metadata(req.novel_text)
     if req.novel_title:meta["title"]=req.novel_title
     if req.author:meta["author"]=req.author
-    result=await ai.convert(chapters,meta,style_note=req.style_note)
+    result=await ai.convert(chapters,meta,None,req.style_note)
     result.analysis_time_ms=int((time.time()-t0)*1000)
     if not result.success:raise HTTPException(500,result.error)
     return{"success":True,"yaml":result.yaml_output,"summary":result.summary,"chapter_count":result.chapter_count,"character_count":result.character_count,"scene_count":result.scene_count,"analysis_time_ms":result.analysis_time_ms,"script_json":ScriptGenerator.to_json(result.script)}
